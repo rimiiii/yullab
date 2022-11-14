@@ -14,10 +14,11 @@ def train(loader, model, criterion, optimizer):
         optimizer.step()
 
         running_loss += loss.item()
-        #train_losses.append(loss.item())
+        # train_losses.append(loss.item())
 
-    #train_losses.append(running_loss/len(loader))
-    return running_loss#, train_losses
+    # train_losses.append(running_loss/len(loader))
+    return running_loss  # train_losses
+
 
 def test(loader, model, criterion):
     test_loss = 0
@@ -35,5 +36,5 @@ def test(loader, model, criterion):
             equals = top_class == label_idx
             accuracy += torch.mean(equals.type(torch.FloatTensor))
 
-    #test_losses.append(test_loss/len(loader))
-    return test_loss, accuracy #test_losses
+    # test_losses.append(test_loss/len(loader))
+    return test_loss, accuracy  # test_losses
