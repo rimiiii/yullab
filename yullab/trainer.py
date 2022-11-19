@@ -5,11 +5,10 @@ def train(loader, model, criterion, optimizer, n_epochs):
     train_losses = []
     for epoch in range(n_epochs):
         running_loss = 0
-        for imgs, labels in loader:
+        for images, labels in loader:
             optimizer.zero_grad()
 
-            imgs = imgs.reshape(-1, 784)
-            outputs = model(imgs)
+            outputs = model(images)
             loss = criterion(outputs, labels)
             loss.backward()
 
@@ -28,7 +27,6 @@ def test(loader, model, criterion):
     accuracy = 0
     with torch.no_grad():
         for images, labels in loader:
-            images = images.reshape(-1, 784)
             outputs = model(images)
 
             test_loss += criterion(outputs, labels)
