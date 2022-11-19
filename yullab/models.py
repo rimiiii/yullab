@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch
 import torch.nn.functional as F
 
 
@@ -11,6 +10,7 @@ class MLP(nn.Module):
         self.dropout = nn.Dropout(0.2)
 
     def forward(self, x):
+        x = x.reshape(-1, 784)
         x = F.relu(self.fc1(x))
         x = self.dropout(x)
         x = F.relu(self.fc2(x))
@@ -21,14 +21,17 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, 3)
+        self.pool1 = nn.MaxPool2d(3)
         self.conv2 = nn.Conv2d(32, 128, 3)
-        self.fc2 = nn.Linear(128, 10)
+        self.pool2 = nn.MaxPool2d(3)
+        self.fc1 = nn.Linear(512, 10)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
-        x = nn.MaxPool2d(x)
+        x = self.pool1(x)
         x = F.relu(self.conv2(x))
-        x = x.reshape()
+        x = self.pool2(x)
+        x = x.flatten(1)
         x = F.relu(self.fc1(x))
         return x
 
