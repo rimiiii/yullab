@@ -6,8 +6,7 @@ from PIL import Image
 
 
 class FashionDataset(Dataset):
-    def __init__(self, train_filename, img_size=(28, 28), num_classes=10,
-                 train_transforms=None):
+    def __init__(self, train_filename, train_transforms=None, img_size=(28, 28), num_classes=10,):
         self.df = pd.read_csv(train_filename)
         self.img_size = img_size
         self.num_classes = num_classes
