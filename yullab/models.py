@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import torch
 
 
 class MLP(nn.Module):
@@ -39,15 +40,16 @@ class CNN(nn.Module):
 class RNN(nn.Module):
     def __init__(self):
         super(RNN, self).__init__()
-        self.rnn1 = nn.RNN(input_size=28, hidden_size=128)
-        self.rnn2 = nn.RNN(input_size=128, hidden_size=64)
+        self.rnn1 = nn.RNN(input_size=28, hidden_size=128, batch_first=True)
+        self.rnn2 = nn.RNN(input_size=128, hidden_size=64, batch_first=True)
         self.fc1 = nn.Linear(64, 10)
 
     def forward(self, x):
+        x = torch.squeeze(x)
         outputs, hidden = self.rnn1(x)
         outputs, hidden = self.rnn2(hidden)
         x = self.fc1(outputs[-1])
-        x = F.log_softmax(x, dim=1)
+        x = F.relu(x)
         return x
 
 
@@ -55,11 +57,11 @@ class LSTM(nn.Module):
     def __init__(self):
         super(LSTM, self).__init__()
         self.lstm = nn.LSTM(input_size=28, hidden_size=128, batch_first=True)
-        self.fc1 = nn.Linear(64, 10)
+        self.fc1 = nn.Linear(128, 10)
 
     def forward(self, x):
+        x = torch.squeeze(x)
         outputs, hidden = self.lstm(x)
-        print(outputs.shape)
-        x = self.fc1(outputs[-1])
-        #x = F.log_softmax(x, dim=1)
+        x = self.fc1(outputs[:, -1, :])
+        x = F.relu(x)
         return x
