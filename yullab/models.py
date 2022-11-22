@@ -65,3 +65,36 @@ class LSTM(nn.Module):
         x = self.fc1(outputs[:, -1, :])
         x = F.relu(x)
         return x
+
+
+class VAE(nn.Module):
+    def __init__(self, input_dim, hidden_dim, latent_dim):
+        super(VAE, self).__init__()
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.latent_dim = latent_dim
+
+        # encode
+        self.fc1 = nn.Linear(self.input_dim, self.hidden_dim)
+        self.fc2 = nn.Linear(self.hidden_dim, self.latent_dim)
+
+        # decode
+        self.fc3 = nn.Linear(self.latent_dim, self.hidden_dim)
+        self.fc4 = nn.Linear(self.hidden_dim, self.input_dim)
+
+    def encode(self, x):
+        hidden = F.relu(self.fc1(x))
+        mu = F.relu(self.fc2(hidden))
+        sigma = F.relu(self.fc2(hidden))
+        return mu, sigma
+
+    def decode(self, z):
+        hidden = F.relu(self.fc3(z))
+        output = self.fc4(hidden)
+        return output
+
+    def forward(self, x):
+        mu, sigma = self.encode(x)
+        z = mu + sigma
+        reconstructed_z = self.decode(z)
+        return reconstructed_z, mu, sigma
