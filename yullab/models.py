@@ -95,6 +95,6 @@ class VAE(nn.Module):
 
     def forward(self, x):
         mu, sigma = self.encode(x)
-        z = mu + sigma
+        z = mu + sigma * torch.randn(self.latent_dim)
         reconstructed_z = self.decode(z)
         return reconstructed_z, mu, sigma
