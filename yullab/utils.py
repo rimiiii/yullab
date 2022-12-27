@@ -4,6 +4,8 @@ FULL_DRUM_PITCH_CLASSES = [
      54, 68, 69, 70, 71, 73, 78, 80, 46, 67, 72, 74, 79, 81, 45, 29, 41, 61, 64,
      84, 48, 47, 60, 63, 77, 86, 87, 50, 30, 43, 62, 76, 83, 49, 55, 57, 58, 51,
      52, 53, 59, 82]]
+
+
 ROLAND_DRUM_PITCH_CLASSES = [
     # kick drum
     [36],
@@ -24,6 +26,7 @@ ROLAND_DRUM_PITCH_CLASSES = [
     # ride cymbal
     [51, 53, 59]
 ]
+
 
 def _classes_to_map(classes):
       class_map = {}
