@@ -99,20 +99,3 @@ class VAE(nn.Module):
         z = mu + sigma * torch.randn(self.latent_dim)
         reconstructed_z = self.decode(z)
         return reconstructed_z, mu, sigma
-
-
-### for musicvae ###
-class LSTMEncoder(nn.Module):
-    def __init__(self, input_size, z_size, hidden_size=128):
-        super().__init__()
-        self.z_size = z_size
-
-        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, bidirectional=True)
-        self.linear = nn.Linear(in_features=hidden_size*2, out_features=z_size*2)
-        
-    def forward(self, x):
-        outs, _ = self.lstm(x)
-        outs = self.linear(outs[:,-1,:])  # last
-        mean = outs[:,:self.z_size]
-        std = F.softplus(outs[:,self.z_size:])
-        return dist.Normal(loc=mean, scale=std)
